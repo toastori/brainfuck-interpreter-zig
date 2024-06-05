@@ -1,7 +1,11 @@
 const std = @import("std");
 const c_stdio = @cImport(@cInclude("stdio.h"));
 
+const Value = @import("data.zig").Value;
 const Data = @import("data.zig").Data;
+const fn_common = @import("function/common.zig");
+const loop = @import("loop.zig").loop;
+const function_switch = @import("function/function_switch.zig").function_switch;
 
 pub fn main() !void {
     // Allocator
@@ -27,15 +31,16 @@ pub fn main() !void {
 
         if (byte > 59) {
             if (byte == '>') {
-                data.array_ptr +%= 1;
+                // std.debug.print(">\n", .{});
+                fn_common.ptr_shift_right(&data, .{ .u15_ = 1 });
             } else if (byte == '<') {
-                data.array_ptr -%= 1;
+                // std.debug.print("<\n", .{});
+                fn_common.ptr_shift_left(&data, .{ .u15_ = 1 });
             } else if (byte == '[') {
                 if (data.array[@as(usize, @intCast(data.array_ptr))] == 0) {
                     var nested: u8 = 0;
                     while (true) {
                         const byte_2 = data.file_reader.readByte() catch std.process.exit(0);
-                        data.file_ptr += 1;
                         if (byte_2 == ']') {
                             if (nested != 0) {
                                 nested -= 1;
@@ -47,29 +52,35 @@ pub fn main() !void {
                         }
                     }
                 } else {
-                    try data.bracket_stack.append(data.file_ptr);
+                    data.bracket_stack.append(0) catch |e| return e;
+                    loop(&data) catch |e| return e;
+                    // for (data.instruction_array.instructions.items, 0..) |i, num| {
+                    //     std.debug.print("{d}. {any}", .{ num, i.byte_code });
+                    //     std.debug.print(" {d}\n", .{if (i.value == @import("data.zig").ValueEnum.u8_) i.value.u8_ else if (i.value == @import("data.zig").ValueEnum.u15_) i.value.u15_ else i.value.usize_});
+                    // }
+                    while (data.instruction_array.next()) |instruction| {
+                        function_switch(&data, instruction);
+                    }
+                    data.instruction_array.reset();
                 }
             } else if (byte == ']') {
-                if (data.array[@as(usize, @intCast(data.array_ptr))] == 0) {
-                    _ = data.bracket_stack.pop();
-                } else {
-                    data.file_ptr = data.bracket_stack.getLastOrNull() orelse {
-                        _ = c_stdio.printf("\nError: No matching '[' for ']' at %d", data.file_ptr);
-                        std.process.exit(0);
-                        unreachable;
-                    };
-                    data.file.seekTo(data.file_ptr + 1) catch unreachable;
-                }
+                @panic("Error: Found unmatching closing bracket.");
             }
         } else if (byte < 47) {
             if (byte == '+') {
-                data.array[@as(usize, @intCast(data.array_ptr))] +%= 1;
+                // std.debug.print("+\n", .{});
+                fn_common.addition(&data, .{ .u8_ = 1 });
             } else if (byte == '-') {
-                data.array[@as(usize, @intCast(data.array_ptr))] -%= 1;
+                // std.debug.print("-\n", .{});
+                fn_common.subtraction(&data, .{ .u8_ = 1 });
             } else if (byte == '.') {
-                _ = c_stdio.putchar(data.array[@as(usize, @intCast(data.array_ptr))]);
-            } else if (byte == ',') data.array[@as(usize, @intCast(data.array_ptr))] = @as(u8, @intCast(c_stdio.getchar()));
+                // std.debug.print(".\n", .{});
+                fn_common.stdout(&data);
+                std.debug.print("{any}\n", .{data.array[0..8]});
+            } else if (byte == ',') {
+                // std.debug.print(",\n", .{});
+                fn_common.stdin(&data);
+            }
         }
-        data.file_ptr += 1;
     }
 }
