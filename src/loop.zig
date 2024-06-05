@@ -42,7 +42,7 @@ pub fn loop(data: *Data) !void {
                 });
                 continue;
             } else if (byte == '[') {
-                try data.bracket_stack.append(if (data.instruction_array.instructions.items.len == 0) 0 else data.instruction_array.instructions.items.len - 1);
+                try data.bracket_stack.append(data.instruction_array.instructions.items.len);
                 try loop(data);
             } else if (byte == ']') {
                 try data.instruction_array.instructions.append(.{

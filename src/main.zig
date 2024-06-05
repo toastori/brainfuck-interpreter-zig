@@ -1,5 +1,6 @@
 const std = @import("std");
 const c_stdio = @cImport(@cInclude("stdio.h"));
+const conio = @cImport(@cInclude("conio.h"));
 
 const Value = @import("data.zig").Value;
 const Data = @import("data.zig").Data;
@@ -13,6 +14,8 @@ pub fn main() !void {
     // Parameter
     var parameter = try std.process.ArgIterator.initWithAllocator(allocator);
     defer parameter.deinit();
+
+    // var writer = std.io.getStdOut().writer();
 
     _ = parameter.next(); // Skip exe
 
@@ -55,11 +58,14 @@ pub fn main() !void {
                     data.bracket_stack.append(0) catch |e| return e;
                     loop(&data) catch |e| return e;
                     // for (data.instruction_array.instructions.items, 0..) |i, num| {
-                    //     std.debug.print("{d}. {any}", .{ num, i.byte_code });
-                    //     std.debug.print(" {d}\n", .{if (i.value == @import("data.zig").ValueEnum.u8_) i.value.u8_ else if (i.value == @import("data.zig").ValueEnum.u15_) i.value.u15_ else i.value.usize_});
+                    //     try writer.print("{d}. {any}", .{ num, i.byte_code });
+                    //     try writer.print(" {d}\n", .{if (i.value == @import("data.zig").ValueEnum.u8_) i.value.u8_ else if (i.value == @import("data.zig").ValueEnum.u15_) i.value.u15_ else i.value.usize_});
                     // }
                     while (data.instruction_array.next()) |instruction| {
                         function_switch(&data, instruction);
+                        // try writer.print("{d}\r", .{data.instruction_array.ptr});
+                        // std.debug.print("{d} {any}\r", .{ data.array_ptr, data.array[0..10] });
+                        // _ = conio.getch();
                     }
                     data.instruction_array.reset();
                 }
@@ -76,7 +82,7 @@ pub fn main() !void {
             } else if (byte == '.') {
                 // std.debug.print(".\n", .{});
                 fn_common.stdout(&data);
-                std.debug.print("{any}\n", .{data.array[0..8]});
+                // std.debug.print("  index {d}\n", .{data.array_ptr});
             } else if (byte == ',') {
                 // std.debug.print(",\n", .{});
                 fn_common.stdin(&data);

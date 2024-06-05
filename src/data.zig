@@ -25,7 +25,7 @@ pub const Instructions = struct {
     ptr: usize,
 
     pub fn next(self: *@This()) ?Instruction {
-        self.ptr += 1;
+        defer self.ptr += 1;
         return if (self.ptr == self.instructions.items.len) null else self.instructions.items[self.ptr];
     }
 
