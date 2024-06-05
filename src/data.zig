@@ -3,13 +3,7 @@ const c_stdio = @cImport(@cInclude("stdio.h"));
 
 const ByteCode = @import("function/bytecode.zig").ByteCode;
 
-pub const ValueEnum = enum {
-    u8_,
-    u15_,
-    usize_,
-};
-
-pub const Value = union(ValueEnum) {
+pub const Value = union {
     u8_: u8,
     u15_: u15,
     usize_: usize,
