@@ -1,4 +1,5 @@
 const fn_common = @import("function/common.zig");
+const std = @import("std");
 
 const Value = @import("data.zig").Value;
 const Data = @import("data.zig").Data;
@@ -42,13 +43,17 @@ pub fn loop(data: *Data) !void {
                 });
                 continue;
             } else if (byte == '[') {
+                try data.instruction_array.instructions.append(.{ .byte_code = .skip, .value = .{ .usize_ = 0 } });
                 try data.bracket_stack.append(data.instruction_array.instructions.items.len);
                 try loop(data);
             } else if (byte == ']') {
+                const jump_value = data.bracket_stack.pop();
                 try data.instruction_array.instructions.append(.{
                     .byte_code = .jump,
-                    .value = .{ .usize_ = data.bracket_stack.pop() },
+                    .value = .{ .usize_ = jump_value },
                 });
+                if (jump_value != 0)
+                    data.instruction_array.instructions.items[jump_value - 1].value = .{ .usize_ = data.instruction_array.instructions.items.len };
                 return;
             }
         } else if (byte < 47) {

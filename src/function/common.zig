@@ -30,7 +30,7 @@ pub inline fn subtraction(data: *Data, value: Value) void {
 
 /// Print value at pointer
 pub inline fn stdout(data: *Data) void {
-    std.debug.print("print index {d} ", .{data.array_ptr});
+    // std.debug.print("print index {d} ", .{data.array_ptr});
     _ = stdio.putchar(data.array[@as(usize, @intCast(data.array_ptr))]);
 }
 
@@ -43,6 +43,13 @@ pub inline fn stdin(data: *Data) void {
 pub inline fn jump(data: *Data, value: Value) void {
     // std.debug.print("jump\n", .{});
     if (data.array[@as(usize, @intCast(data.array_ptr))] != 0) {
+        // std.debug.print("jump to {d} ", .{value.usize_});
+        data.instruction_array.ptr = value.usize_;
+    }
+}
+
+pub inline fn skip(data: *Data, value: Value) void {
+    if (data.array[@as(usize, @intCast(data.array_ptr))] == 0) {
         // std.debug.print("jump to {d} ", .{value.usize_});
         data.instruction_array.ptr = value.usize_;
     }

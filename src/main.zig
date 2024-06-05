@@ -55,7 +55,7 @@ pub fn main() !void {
                         }
                     }
                 } else {
-                    data.bracket_stack.append(0) catch |e| return e;
+                    try data.bracket_stack.append(0);
                     loop(&data) catch |e| return e;
                     // for (data.instruction_array.instructions.items, 0..) |i, num| {
                     //     try writer.print("{d}. {any}", .{ num, i.byte_code });
