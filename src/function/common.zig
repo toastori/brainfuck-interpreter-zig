@@ -1,4 +1,3 @@
-const std = @import("std");
 const stdio = @cImport(@cInclude("stdio.h"));
 
 const Value = @import("../data.zig").Value;
@@ -34,12 +33,14 @@ pub inline fn stdin(data: *Data) void {
     data.array[@as(usize, @intCast(data.array_ptr))] = @as(u8, @intCast(stdio.getchar()));
 }
 
+/// Jump to corresponding opening bracket when pointing to non-0
 pub inline fn jump(data: *Data, value: Value) void {
     if (data.array[@as(usize, @intCast(data.array_ptr))] != 0) {
         data.instruction_array.ptr = value.usize_;
     }
 }
 
+/// Skip to corresponding closing bracket when pointing to 0
 pub inline fn skip(data: *Data, value: Value) void {
     if (data.array[@as(usize, @intCast(data.array_ptr))] == 0) {
         data.instruction_array.ptr = value.usize_;

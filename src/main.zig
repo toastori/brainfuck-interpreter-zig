@@ -1,9 +1,9 @@
 const std = @import("std");
 const c_stdio = @cImport(@cInclude("stdio.h"));
-const conio = @cImport(@cInclude("conio.h"));
 
-const Value = @import("data.zig").Value;
 const Data = @import("data.zig").Data;
+const Value = @import("data.zig").Value;
+
 const fn_common = @import("function/common.zig");
 const loop = @import("loop.zig").loop;
 const function_switch = @import("function/function_switch.zig").function_switch;
@@ -31,11 +31,11 @@ pub fn main() !void {
         const byte = data.file_reader.readByte() catch std.process.exit(0);
 
         if (byte > 59) {
-            if (byte == '>') {
+            if (byte == '>') { // ptr_shift_right
                 fn_common.ptr_shift_right(&data, .{ .u15_ = 1 });
-            } else if (byte == '<') {
+            } else if (byte == '<') { // ptr_shift_left
                 fn_common.ptr_shift_left(&data, .{ .u15_ = 1 });
-            } else if (byte == '[') {
+            } else if (byte == '[') { // call `loop()` when pointing to non-0
                 if (data.array[@as(usize, @intCast(data.array_ptr))] == 0) {
                     var nested: u8 = 0;
                     while (true) {
@@ -58,17 +58,17 @@ pub fn main() !void {
                     }
                     data.instruction_array.reset();
                 }
-            } else if (byte == ']') {
+            } else if (byte == ']') { // is an error when meting ] here (out side loop)
                 @panic("Error: Found unmatching closing bracket.");
             }
         } else if (byte < 47) {
-            if (byte == '+') {
+            if (byte == '+') { // addition
                 fn_common.addition(&data, .{ .u8_ = 1 });
-            } else if (byte == '-') {
+            } else if (byte == '-') { //subtraction
                 fn_common.subtraction(&data, .{ .u8_ = 1 });
-            } else if (byte == '.') {
+            } else if (byte == '.') { // stdout
                 fn_common.stdout(&data);
-            } else if (byte == ',') {
+            } else if (byte == ',') { // stdin
                 fn_common.stdin(&data);
             }
         }

@@ -4,6 +4,7 @@ const ByteCode = @import("bytecode.zig").ByteCode;
 const Data = @import("../data.zig").Data;
 const Instruction = @import("../data.zig").Instruction;
 
+/// Action base on bytecode
 pub inline fn function_switch(data: *Data, instruction: Instruction) void {
     switch (instruction.byte_code) {
         .ptr_shift_right => fn_common.ptr_shift_right(data, instruction.value),
