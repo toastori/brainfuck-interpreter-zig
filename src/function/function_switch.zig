@@ -1,6 +1,6 @@
 const fn_common = @import("common.zig");
 
-const ByteCode = @import("byte_code.zig").ByteCode;
+const ByteCode = @import("bytecode.zig").ByteCode;
 const Data = @import("../data.zig").Data;
 const Instruction = @import("../data.zig").Instruction;
 

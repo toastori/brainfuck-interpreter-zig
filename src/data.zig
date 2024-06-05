@@ -1,7 +1,7 @@
 const std = @import("std");
 const c_stdio = @cImport(@cInclude("stdio.h"));
 
-const ByteCode = @import("function/byte_code.zig").ByteCode;
+const ByteCode = @import("function/bytecode.zig").ByteCode;
 
 pub const ValueEnum = enum {
     u8_,

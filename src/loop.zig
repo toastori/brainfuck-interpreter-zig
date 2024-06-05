@@ -3,7 +3,7 @@ const fn_common = @import("function/common.zig");
 const Value = @import("data.zig").Value;
 const Data = @import("data.zig").Data;
 
-const ByteCode = @import("function/byte_code.zig").ByteCode;
+const ByteCode = @import("function/bytecode.zig").ByteCode;
 
 pub fn loop(data: *Data) !void {
     var byte: u8 = try data.file_reader.readByte();
