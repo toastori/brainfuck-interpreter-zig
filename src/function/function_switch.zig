@@ -13,7 +13,7 @@ pub inline fn function_switch(data: *Data, instruction: Instruction) void {
         .subtraction => fn_common.subtraction(data, instruction.value),
         .stdout => fn_common.stdout(data),
         .stdin => fn_common.stdin(data),
-        .jump => fn_common.jump(data, instruction.value),
-        .skip => fn_common.skip(data, instruction.value),
+        .jump_ne_zero => fn_common.jump_ne_zero(data, instruction.value),
+        .jump_eql_zero => fn_common.jump_eql_zero(data, instruction.value),
     }
 }

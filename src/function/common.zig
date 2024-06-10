@@ -34,14 +34,14 @@ pub inline fn stdin(data: *Data) void {
 }
 
 /// Jump to corresponding opening bracket when pointing to non-0
-pub inline fn jump(data: *Data, value: Value) void {
+pub inline fn jump_ne_zero(data: *Data, value: Value) void {
     if (data.array[@as(usize, @intCast(data.array_ptr))] != 0) {
         data.instruction_array.ptr = value.usize_;
     }
 }
 
 /// Skip to corresponding closing bracket when pointing to 0
-pub inline fn skip(data: *Data, value: Value) void {
+pub inline fn jump_eql_zero(data: *Data, value: Value) void {
     if (data.array[@as(usize, @intCast(data.array_ptr))] == 0) {
         data.instruction_array.ptr = value.usize_;
     }

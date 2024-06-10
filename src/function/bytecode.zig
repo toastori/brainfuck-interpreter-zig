@@ -6,6 +6,6 @@ pub const ByteCode = enum(u8) {
     subtraction,
     stdout,
     stdin,
-    jump,
-    skip,
+    jump_ne_zero,
+    jump_eql_zero,
 };

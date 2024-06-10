@@ -43,13 +43,13 @@ pub fn loop(data: *Data) !void {
                 });
                 continue;
             } else if (byte == '[') { // Open a new loop()
-                try data.instruction_array.instructions.append(.{ .byte_code = .skip, .value = .{ .usize_ = 0 } }); // Push skip instruction that skip to closing bracket when pointing to 0
+                try data.instruction_array.instructions.append(.{ .byte_code = .jump_eql_zero, .value = .{ .usize_ = 0 } }); // Push skip instruction that skip to closing bracket when pointing to 0
                 try data.bracket_stack.append(data.instruction_array.instructions.items.len); // Push value to stack for closing bracket to jump to
                 try loop(data);
             } else if (byte == ']') { // End this loop()
                 const jump_value = data.bracket_stack.pop();
                 try data.instruction_array.instructions.append(.{ // Push the jump instruction to jump to start of this loop when pointing to non-0
-                    .byte_code = .jump,
+                    .byte_code = .jump_ne_zero,
                     .value = .{ .usize_ = jump_value },
                 });
                 if (jump_value != 0) // Only assign skip value for the corresponding `skip` instruction when it is not outermost loop
