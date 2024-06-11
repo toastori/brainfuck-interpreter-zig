@@ -8,4 +8,5 @@ pub const ByteCode = enum(u8) {
     stdin,
     jump_ne_zero,
     jump_eql_zero,
+    set_zero,
 };

@@ -15,5 +15,6 @@ pub inline fn function_switch(data: *Data, instruction: Instruction) void {
         .stdin => fn_common.stdin(data),
         .jump_ne_zero => fn_common.jump_ne_zero(data, instruction.value),
         .jump_eql_zero => fn_common.jump_eql_zero(data, instruction.value),
+        .set_zero => fn_common.set_zero(data),
     }
 }

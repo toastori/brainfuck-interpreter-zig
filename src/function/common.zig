@@ -46,3 +46,7 @@ pub inline fn jump_eql_zero(data: *Data, value: Value) void {
         data.instruction_array.ptr = value.usize_;
     }
 }
+
+pub inline fn set_zero(data: *Data) void {
+    data.array[data.array_ptr] = 0;
+}
