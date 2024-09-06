@@ -4,5 +4,8 @@
 # zig's output directory
 /zig-out
 
-# scripts
-*.bat
+# bf files
+/bf
+
+# temp object
+*.exe
