@@ -1,0 +1,8 @@
+# zig's cache directory
+/.zig-cache
+
+# zig's output directory
+/zig-out
+
+# scripts
+*.bat
